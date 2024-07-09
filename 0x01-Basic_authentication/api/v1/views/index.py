@@ -35,3 +35,14 @@ def unauthorized() -> str:
       str: The response message indicating that the request is unauthorized.
     """
     abort(401)
+
+
+@app_views.route('/forbidden/', strict_slashes=False)
+def Forbidden() -> str:
+    """
+    Endpoint for handling Forbidden requests.
+
+    Returns:
+      str: The response message indicating that the request is Forbidden.
+    """
+    abort(403)
