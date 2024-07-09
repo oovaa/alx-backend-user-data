@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 '''
-auth module 
+auth module
 '''
 
 from typing import List, TypeVar
@@ -24,7 +24,7 @@ class Auth:
 
         Args:
         - path: The path to check.
-        - excluded_paths: A list of paths that are excluded from authentication.
+        - excluded_paths: A list of paths that are excluded from authentication
 
         Returns:
         - True if authentication is required, False otherwise.
