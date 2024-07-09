@@ -28,4 +28,10 @@ def stats() -> str:
 
 @app_views.route('/unauthorized/', strict_slashes=False)
 def unauthorized() -> str:
+    """
+    Endpoint for handling unauthorized requests.
+
+    Returns:
+      str: The response message indicating that the request is unauthorized.
+    """
     abort(401)
