@@ -7,11 +7,17 @@ from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 import os
+from api.v1.auth.auth import Auth
 
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
+
+auth = getenv('AUTH_TYPE', None)
+
+if auth:
+    auth = Auth()
 
 
 @app.errorhandler(404)
@@ -33,6 +39,21 @@ def Forbidden(error) -> str:
     """ Forbidden handler
     """
     return jsonify({"error": "Forbidden"}), 403
+
+
+@app.before_request
+def pre_process():
+    if not auth:
+        return
+    if auth.require_auth(request.path,
+                         ['/api/v1/status/',
+                          '/api/v1/unauthorized/',
+                          '/api/v1/forbidden/']):
+        return
+    if auth.authorization_header(request) is None:
+        abort(401, None)
+    if auth.current_user(request) is None:
+        abort(403, None)
 
 
 if __name__ == "__main__":
