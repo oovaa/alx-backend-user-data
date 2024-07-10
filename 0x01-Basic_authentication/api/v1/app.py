@@ -43,20 +43,20 @@ def Forbidden(error) -> str:
 
 @app.before_request
 def pre_process():
+    print('in bre process')
+    allowed_list = ['/api/v1/status/',
+                    '/api/v1/unauthorized/', '/api/v1/forbidden/']
     if not auth:
         return
-    if auth.require_auth(request.path,
-                         ['/api/v1/status/',
-                          '/api/v1/unauthorized/',
-                          '/api/v1/forbidden/']):
+    if not auth.require_auth(request.path, allowed_list):
         return
     if auth.authorization_header(request) is None:
-        abort(401, None)
+        abort(401)
     if auth.current_user(request) is None:
-        abort(403, None)
+        abort(403)
 
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
-    app.run(host=host, port=port)
+    app.run(host=host, port=port, debug=True)
